@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        padding: 15px;
+      }
+      .field {
+        flex-direction: column;
+        padding: 10px 0;
+      }
+    </style>
+    <title>WebSocket demo</title>
+  </head>
+  <body>
+    <div class="field">
+      <label>Valor 1:</label>
+      <input name="input1" />
+    </div>
+
+    <div class="field">
+      <label>Valor 2:</label>
+      <input name="input2" />
+    </div>
+
+    <button type="submit">Somar</button>
+
+    <div class="field">
+      <label>Resultado:</label>
+      <span name="result"></span>
+    </div>
+
+    <script>
+      var sendButton = document.getElementsByTagName("button")[0];
+      var result = document.getElementsByName("result")[0];
+      var input1 = document.getElementsByName("input1")[0];
+      var input2 = document.getElementsByName("input2")[0];
+
+      function connect() {
+        var ws = new WebSocket("ws://127.0.0.1:8764/");
+
+        ws.onopen = function () {
+          sendButton.onclick = () => {
+            ws.send(
+              JSON.stringify({ input1: input1.value, input2: input2.value })
+            );
+          };
+        };
+
+        ws.onclose = function () {
+          setTimeout(() => {
+            connect();
+          }, 100);
+        };
+
+        ws.onmessage = function (ev) {
+          result.textContent = JSON.parse(ev.data);
+        };
+      }
+
+      connect();
+    </script>
+  </body>
+</html>
