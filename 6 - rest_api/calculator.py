@@ -27,7 +27,7 @@ def main():
     numero1: str = input("\nDigite o 1º número:")
     numero2: str = input("Digite o 2º número:")
 
-    request_url = os.path.join(BASE_URL, operacoes[operacao][1], numero1, numero2)
+    request_url = BASE_URL + '/'+ operacoes[operacao][1]+ '/'+ numero1+ '/'+ numero2
 
     response = requests.get(request_url).json()
 
